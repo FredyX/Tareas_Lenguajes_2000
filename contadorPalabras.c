@@ -1,24 +1,64 @@
 #include<stdio.h>
-//cuenta el numero de palabras,lineas y caracteres
-#define OUT 0 // salio de una palabra
-#define IN  1 // entro a una nueva palabra
+#include<stdlib.h>
+
+#define OUT 0 // salio de una palabra.
+#define IN 1 // Entro a una palabra.
+_Bool palabraConNumero(char caracter, int numero);
+
 int main(){
-	int caracter, contadorLineas, contadorPalabras, contadorCaracteres = 0 ;
-	int estado = OUT;
-	while((caracter = getchar()) != EOF){
-		//putchar(caracter);
-		contadorCaracteres++;
-		if(caracter == '\n')
-			contadorLineas++;
-		if(caracter =='\n' || caracter =='\t' || caracter ==' ')
-			estado = OUT;
-		else
-			if(estado == OUT){
-				
-				contadorPalabras++;
-				estado = IN;
+	
+	FILE *archivo;
+	int caracter, cantidadPalabrasNumeros, cantidadPalabras, cantidadNumeros = 0;
+	_Bool estadoPalabra = 0;
+	_Bool estadoNumero = 0;
+	archivo = fopen("archivo.txt","r");
+
+	if(archivo == NULL)
+		printf("%s\n","Error al intentar abrir el archivo");
+	else{
+		while(caracter = fgetc(archivo) != EOF){
+			if(caracter == '\n' || caracter == ' ' || caracter =='\t'){
+				estadoPalabra = OUT;
+				estadoNumero = OUT;
 			}
+			else{
+				
+				if(estadoPalabra == OUT){
+					cantidadPalabras++;
+					estadoPalabra =IN;
+				}				
+
+				if(estadoPalabra == IN && estadoNumero == OUT){
+					if(palabraConNumero(caracter, 9)){
+						estadoNumero == IN;
+						cantidadPalabrasNumeros++;
+						cantidadPalabras -= 1;
+						estadoNumero = IN;	
+					}
+					
+				}
+					
+					
+			}
+		}
 	}
-	printf("%s\n%s %d, %s %d, %s %d\n","El fichero contiene lo siguiente","numero de palabras",contadorPalabras
-			,"El numero de lineas es ",contadorLineas,"El numero de caracteres es ",contadorCaracteres);
+	fclose(archivo);
+	printf("%s\n%s %d\n%s %d","Este programa cuenta numero de palabras con numero y sin numeros", 
+			"El numero de palabras sin numero es : ",cantidadPalabras,
+			"El numero de palabras con numero es : ",cantidadPalabrasNumeros
+			 );
+	return 0;
+}
+
+_Bool palabraConNumero(char caracter,int numero){
+	_Bool resultado = 1;
+	if(caracter != numero){
+		if(numero == 0){
+			resultado = 0;
+			return resultado;
+		}
+		palabraConNumero(caracter,numero -1);
+	}
+	else
+		return resultado;
 }
