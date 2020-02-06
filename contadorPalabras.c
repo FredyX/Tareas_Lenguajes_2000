@@ -1,22 +1,23 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <stdbool.h>
 
 #define OUT 0 // salio de una palabra.
 #define IN 1 // Entro a una palabra.
-_Bool palabraConNumero(char caracter, int numero);
+bool palabraConNumero(char caracter, int numero);
 
 int main(){
 	
 	FILE *archivo;
 	int caracter, cantidadPalabrasNumeros, cantidadPalabras, cantidadNumeros = 0;
-	_Bool estadoPalabra = 0;
-	_Bool estadoNumero = 0;
+	bool estadoPalabra = 0;
+	bool estadoNumero = 0;
 	archivo = fopen("archivo.txt","r");
 
 	if(archivo == NULL)
 		printf("%s\n","Error al intentar abrir el archivo");
 	else{
-		while(caracter = fgetc(archivo) != EOF){
+		while((caracter = fgetc(archivo)) != EOF){
 			if(caracter == '\n' || caracter == ' ' || caracter =='\t'){
 				estadoPalabra = OUT;
 				estadoNumero = OUT;
@@ -50,8 +51,8 @@ int main(){
 	return 0;
 }
 
-_Bool palabraConNumero(char caracter,int numero){
-	_Bool resultado = 1;
+bool palabraConNumero(char caracter,int numero){
+	bool resultado = 1;
 	if(caracter != numero){
 		if(numero == 0){
 			resultado = 0;
